@@ -1,5 +1,8 @@
 from playwright.sync_api import sync_playwright, Playwright
 import sqlite3
+import os
+
+print(os.path.abspath("coinmarketcap.db"))
 
 def run(playwright: Playwright):
     chromium = playwright.chromium
@@ -30,7 +33,7 @@ def run(playwright: Playwright):
         change_24h = changes[1].inner_text() if len(changes) >   1 else "N/A"
         market_cap = row.locator("span.jfwGHx").inner_text() if row.locator("span.jfwGHx").count() > 0 else "N/A"
 
-        print(f"{name} | {price} | {change_24h} | {market_cap}")
+        #print(f"{name} | {price} | {change_24h} | {market_cap}")
         cursor.execute("""
             INSERT OR IGNORE INTO coinmarketcap (name, price, change_24h, market_cap)
             VALUES (?, ?, ?, ?)
