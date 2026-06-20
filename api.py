@@ -52,20 +52,28 @@ def get_top10():
 
 @app.route("/coins/search")
 def search_coins():
-    search = request.args.get('search')
-    coins = Coin.query.filter(Coin.name.contains(search)).all()
+    search = request.args.get('search', '').strip()
+    if not search:
+        return jsonify({"error": "Search query is required"}), 400
+
+    coins = Coin.query.filter(Coin.name.ilike(f'%{search}%')).all()
+
+    if not coins:
+        return jsonify({"message": "No coins found"}), 404
+
     return jsonify([coin_to_dict(coin) for coin in coins])
+
 
 @app.route("/coins/active")
 def get_active_coins():
-    coins = Coin.query.filter(Coin.change_24h != "N/A").all()
+    coins = Coin.query.filter(Coin.change_24h != None).all()
     return jsonify([coin_to_dict(coin) for coin in coins])
 
 @app.route("/coins/alphabetical")
 def get_alphabetical_coins():
-    coins = Coin.query.order_by(Coin.price.asc()).limit(10).all()
+    coins = Coin.query.order_by(Coin.name.asc()).limit(10).all()
     return jsonify([coin_to_dict(coin) for coin in coins])
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0", port=5000)
 
