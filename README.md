@@ -17,3 +17,6 @@ GET /coins/top10	Returns the top 10 coins by price
 GET /coins/category/:name	Returns all coins belonging to a specific category
 GET /coins/active	Returns coins with a valid 24h change value
 GET /coins/alphabetical	Returns coins sorted alphabetically by name
+
+LIVE API
+https://coindatafeed-production.up.railway.app/rows
